@@ -22,7 +22,7 @@ module Hydra::Derivatives::Processors
       # TODO: this pulls the whole file into memory. We should stream it from Fedora instead
       # @return [String] the result of calling the extract service
       def fetch
-        req = Net::HTTP.new(uri.host, uri.port)
+        req = Net::HTTP.new(uri.host, uri.port, use_ssl: uri.scheme == 'https')
         resp = req.post(uri.to_s, file_content, request_headers)
         raise "Solr Extract service was unsuccessful. '#{uri}' returned code #{resp.code} for #{source_path}\n#{resp.body}" unless resp.code == '200'
         file_content.rewind if file_content.respond_to?(:rewind)
